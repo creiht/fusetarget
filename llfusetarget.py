@@ -1,3 +1,4 @@
+"""Uses llfuse python bindings"""
 import errno
 import os
 import math
@@ -177,8 +178,7 @@ class Operations(llfuse.Operations):
         print "WRITE fh=%s off=%s len=%sK" % (fh, off, len(buf)/1024)
         if fh != INODE_VOLUME:
             raise llfuse.FUSEError(errno.ENOENT)
-        amt = self.vol.pwrite(off, buf)
-        return amt
+        return self.vol.pwrite(off, buf)
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:

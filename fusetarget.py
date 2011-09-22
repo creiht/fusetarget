@@ -165,7 +165,6 @@ if __name__ == '__main__':
     fuse.fuse_python_api = (0, 2)
     path = '/srv/vol1'
     fs = TargetFuse(path, version="% prog ")
-    #fs.flags = 0
     fs.multithread = 0
     fs.parse(errex=1)
     fs.main()
