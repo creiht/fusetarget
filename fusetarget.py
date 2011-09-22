@@ -12,6 +12,7 @@ from directio import DirectFile
 
 INODE_DIR = 1
 INODE_VOLUME = 2
+BLOCK_SIZE = 1024*4
 
 class Operations(llfuse.Operations):
     def __init__(self, path):
@@ -32,8 +33,8 @@ class Operations(llfuse.Operations):
         attrs.st_gid = stat.st_gid
         attrs.st_rdev = stat.st_dev
         attrs.st_size = stat.st_size
-        attrs.st_blksize = 4096
-        attrs.st_blocks = math.ceil(stat.st_size/4096.0)
+        attrs.st_blksize = BLOCK_SIZE
+        attrs.st_blocks = math.ceil(stat.st_size/float(BLOCK_SIZE))
         attrs.st_atime = stat.st_atime
         attrs.st_mtime = stat.st_mtime
         attrs.st_ctime = stat.st_ctime
@@ -52,8 +53,8 @@ class Operations(llfuse.Operations):
         attrs.st_gid = stat.st_gid
         attrs.st_rdev = stat.st_dev
         attrs.st_size = stat.st_size
-        attrs.st_blksize = 4096
-        attrs.st_blocks = math.ceil(stat.st_size/4096.0)
+        attrs.st_blksize = BLOCK_SIZE
+        attrs.st_blocks = math.ceil(stat.st_size/float(BLOCK_SIZE))
         attrs.st_atime = stat.st_atime
         attrs.st_mtime = stat.st_mtime
         attrs.st_ctime = stat.st_ctime
@@ -162,9 +163,9 @@ class Operations(llfuse.Operations):
         print "STATFS"
         stat = os.lstat(self.path)
         attrs = llfuse.StatvfsData()
-        attrs.f_bsize = 4096
+        attrs.f_bsize = BLOCK_SIZE
         attrs.f_frsize = stat.st_size
-        attrs.f_blocks = math.ceil(stat.st_size/4096.0)
+        attrs.f_blocks = math.ceil(stat.st_size/float(BLOCK_SIZE))
         attrs.f_bfree = 0
         attrs.f_bavail = 0
         attrs.f_files = 1
