@@ -16,7 +16,6 @@ INODE_DIR = 1
 INODE_VOLUME = 2
 BLOCK_SIZE = 1024*4
 
-
 class TargetFuse(fuse.Fuse):
     def __init__(self, path, *args, **kw):
         fuse.Fuse.__init__(self, *args, **kw)
@@ -145,7 +144,7 @@ class TargetFuse(fuse.Fuse):
 
     def truncate ( self, path, size ):
         print '*** truncate', path, size
-        return -errno.ENOSYS
+        return 0
 
     def unlink ( self, path ):
         print '*** unlink', path
@@ -156,7 +155,7 @@ class TargetFuse(fuse.Fuse):
         return -errno.ENOSYS
 
     def write ( self, path, buf, offset ):
-        #print '*** write', path, offset
+        #print '*** write', path, offset, len(buf)/1024
         if path == '/volume':
             return self.vol.pwrite(offset, buf)
         return errno.ENOENT
