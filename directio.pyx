@@ -61,7 +61,7 @@ def pread(fd, offset, length, align=PAGE_SIZE):
 def pwrite(fd, offset, buf, align=PAGE_SIZE):
     """
     Write buf to fd at offset.
-    
+
     :param fd: write opened fd
     :param offset: byte to start write at, must be memaligned
     :param buf: bytes to be written, len must be multiple of BLOCK_SIZE
@@ -121,7 +121,7 @@ cdef class DirectFile:
     def pread(self, offset, length, auto_align=True):
         """
         Read length bytes from file at offset.
-        
+
         :param offset: byte to start read from
         :param length: number of bytes to read
         :param auto_align: enabled page reads to auto align arguments
@@ -131,7 +131,7 @@ cdef class DirectFile:
         result truncated to match your request.
 
         :returns : a string of bytes, read from disk at offset
-        
+
         The length of the returned string will not be larger than specified by
         length, but may be smaller than the number of bytes read from disk if
         auto_align is True.
@@ -161,9 +161,9 @@ cdef class DirectFile:
         aligned with block size, some number of pages greater than the size of
         buf will be read into memory, updated with the new data, and the
         operation will be automatically retried.
-        
+
         :returns : the amount of data written to disk
-        
+
         The value may be larger than the length of buf if auto_align is True.
         """
         try:

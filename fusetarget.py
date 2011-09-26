@@ -71,6 +71,21 @@ class TargetFuse(fuse.Fuse):
         else:
             return errno.ENOENT
 
+    def access(self, path, mode):
+        print '*** access', path, mode
+
+    def statfs(self):
+        print '*** statfs'
+        fstat = os.lstat(self.path)
+        stat = fuse.StatVfs()
+        stat.f_bsize = BLOCK_SIZE
+        stat.f_frsize = BLOCK_SIZE
+        stat.f_blocks = math.ceil(fstat.st_size/float(BLOCK_SIZE))
+        print stat.f_blocks
+        stat.f_bfree = 0
+        stat.f_files = 1
+        stat.f_ffree = 0
+        return stat
 
     def readdir(self, path, offset):
         print '*** readdir', path, offset
@@ -78,83 +93,76 @@ class TargetFuse(fuse.Fuse):
         for r in dirents:
             yield fuse.Direntry(r)
 
-    def mythread ( self ):
-        print '*** mythread'
-        return -errno.ENOSYS
-
-    def chmod ( self, path, mode ):
+    def chmod(self, path, mode):
         print '*** chmod', path, oct(mode)
         return -errno.ENOSYS
 
-    def chown ( self, path, uid, gid ):
+    def chown(self, path, uid, gid):
         print '*** chown', path, uid, gid
         return -errno.ENOSYS
 
-    def fsync ( self, path, isFsyncFile ):
+    def fsync(self, path, isFsyncFile):
         print '*** fsync', path, isFsyncFile
         return 0
-        return -errno.ENOSYS
 
-    def link ( self, targetPath, linkPath ):
+    def link(self, targetPath, linkPath):
         print '*** link', targetPath, linkPath
         return -errno.ENOSYS
 
-    def mkdir ( self, path, mode ):
+    def mkdir(self, path, mode):
         print '*** mkdir', path, oct(mode)
         return -errno.ENOSYS
 
-    def mknod ( self, path, mode, dev ):
+    def mknod(self, path, mode, dev):
         print '*** mknod', path, oct(mode), dev
         return -errno.ENOSYS
 
-    def open ( self, path, flags ):
+    def open( self, path, flags):
         print '*** open', path, flags
         return 0
-        return -errno.ENOSYS
 
-    def read ( self, path, length, offset ):
+    def read(self, path, length, offset):
         print '*** read', path, length, offset
         if path == '/volume':
             return self.vol.pread(offset, length)
         return errno.ENOENT
 
-    def readlink ( self, path ):
+    def lock(self, path, cmd, owner, **kw):
+        print '*** lock', path, cmd, owner, kw
+
+    def readlink(self, path):
         print '*** readlink', path
         return -errno.ENOSYS
 
-    def release ( self, path, flags ):
+    def release(self, path, flags):
         print '*** release', path, flags
         return 0
 
-    def rename ( self, oldPath, newPath ):
+    def rename(self, oldPath, newPath):
         print '*** rename', oldPath, newPath
         return -errno.ENOSYS
 
-    def rmdir ( self, path ):
+    def rmdir(self, path):
         print '*** rmdir', path
         return -errno.ENOSYS
 
-    def statfs ( self ):
-        print '*** statfs'
-        return -errno.ENOSYS
-
-    def symlink ( self, targetPath, linkPath ):
+    def symlink(self, targetPath, linkPath):
         print '*** symlink', targetPath, linkPath
         return -errno.ENOSYS
 
-    def truncate ( self, path, size ):
+    def truncate(self, path, size):
         print '*** truncate', path, size
         return 0
 
-    def unlink ( self, path ):
+    def unlink(self, path):
         print '*** unlink', path
         return -errno.ENOSYS
 
-    def utime ( self, path, times ):
+    def utime(self, path, times):
         print '*** utime', path, times
         return -errno.ENOSYS
 
-    def write ( self, path, buf, offset ):
+    def write(self, path, buf, offset):
         #print '*** write', path, offset, len(buf)/1024
         if path == '/volume':
             return self.vol.pwrite(offset, buf)
