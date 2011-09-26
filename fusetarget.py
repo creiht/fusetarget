@@ -81,7 +81,6 @@ class TargetFuse(fuse.Fuse):
         stat.f_bsize = BLOCK_SIZE
         stat.f_frsize = BLOCK_SIZE
         stat.f_blocks = math.ceil(fstat.st_size/float(BLOCK_SIZE))
-        print stat.f_blocks
         stat.f_bfree = 0
         stat.f_files = 1
         stat.f_ffree = 0
